@@ -1,0 +1,171 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+import pyautogui
+import time
+import requests
+from bs4 import BeautifulSoup
+import warnings
+warnings.filterwarnings("ignore")
+
+# logging.basicConfig(filename='metamasklogger',
+#                             filemode='a',
+#                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+#                             datefmt='%H:%M:%S',
+#                             level=logging.DEBUG)
+
+class Metamask():
+
+    def __init__(self,secret_pharse,password):
+        self.password=password
+        self.secret_pharse=secret_pharse
+
+    # def getSecretPharse(self):
+    #     print(self.secret_pharse)
+
+    def test(self):
+        print('test metamask')
+
+    def openBrowser(self, extension_path, webdriver_path):
+        global driver
+        chrome_options = Options()
+        chrome_options.add_extension(extension_path)
+        driver = webdriver.Chrome(webdriver_path, chrome_options=chrome_options)
+
+        # driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL+'w')
+        driver.maximize_window()
+        time.sleep(10)
+        print('add metamask to chrome toolbar')
+
+    def pauseAndWaitEnter(self):
+        programPause = input("Press the <ENTER> key to continue...")
+
+    def enterToMetamask(self):
+        driver.switch_to.window(driver.window_handles[0])
+        try:
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/div/button').click()
+        except Exception as ex:
+            print(ex)
+        time.sleep(5)
+        try:
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/div[2]/div/div[2]/div[1]/button').click()
+        except Exception as ex:
+            # logging.error(ex)
+            print(ex)
+        time.sleep(5)
+        try:
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/div/div[5]/div[1]/footer/button[1]').click()
+        except Exception as ex:
+            print(ex)
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/form/div[4]/div[1]/div/input').send_keys(self.secret_pharse)
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys(self.password)
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="confirm-password"]').send_keys(self.password)
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/form/div[7]/div').click()
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/form/button').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div/button').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="popover-content"]/div/div/section/header/div/button').click()
+        time.sleep(2)
+
+    def openSiteInNewTab(url,tab_number):
+        driver.execute_script("window.open('','_blank');")
+        driver.switch_to.window(driver.window_handles[tab_number])
+        driver.get(url)
+
+    def swapInMetamask(self,swapfrom,swapto,summ):
+        print('swap in metamask')
+
+    def addBscNetwork(self):
+        Metamask.openSiteInNewTab('https://bscscan.com/',1)
+        time.sleep(7)
+        driver.find_element_by_xpath('//*[@id="body"]/footer/div/div[1]/div[1]/div/div[2]/span/button').click()
+        time.sleep(7)
+        driver.switch_to.window(driver.window_handles[0])
+        driver.refresh()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div[2]/div/button[2]').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div[2]/div[2]/button[2]').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="popover-content"]/div/div/section/header/div/button').click()
+        time.sleep(5)
+
+    def dexguruSwap(self):
+        print('начал свапать на dex.guru')
+        Metamask.openSiteInNewTab('https://dex.guru/token/0xe9e7cea3dedca5984780bafc599bd69add087d56-bsc',2)
+        time.sleep(10)
+        driver.find_element_by_xpath('/html/body/div[10]/div/div[1]/a').click()
+        driver.refresh()
+        time.sleep(10)
+        driver.find_element_by_xpath('//*[@id="root"]/div/div[2]/div/main/div/div/div[2]/div/div[1]/section/div[3]/button').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('/html/body/div[5]/div/div/div/div[2]/div/div[2]/div/div[1]/button').click()
+        time.sleep(5)
+        driver.switch_to.window(driver.window_handles[0])
+        driver.refresh()
+        print('обновляю метамаск страницу для апрува на dex.guru')
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div[2]/div[4]/div[2]/button[2]').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[3]/div/div[2]/div[2]/div[2]/footer/button[2]').click()
+        time.sleep(5)
+        try:
+            driver.find_element_by_xpath('//*[@id="popover-content"]/div/div/section/header/div/button').click()
+            time.sleep(5)
+        except:
+            pass
+        time.sleep(7)
+        driver.refresh()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/button[2]').click()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="popover-content"]/div/div/section/header/div/button').click()
+        time.sleep(5)
+        driver.switch_to.window(driver.window_handles[2])
+
+
+        print('переключаюсь на вкладку dex.guru для обратного свапа')
+        driver.switch_to.window(driver.window_handles[2])
+        time.sleep(15)
+        driver.find_element_by_xpath('//*[@id="root"]/div/div[2]/div/main/div/div/div[2]/div/div[2]/section/div[1]/div[1]/div[2]/span').click()
+        print('нажимаю макс сумму для обратного свопа')
+        time.sleep(5)
+        try:
+            # если ранее свапали то делаем это
+            driver.find_element_by_xpath(
+                '//*[@id="root"]/div/div[2]/div/main/div/div/div[2]/div/div[2]/section/div[3]/button').click()
+            time.sleep(5)
+            driver.find_element_by_xpath('/html/body/div[4]/div/div/div/div[4]/div/div[1]/button').click()
+            time.sleep(5)
+        except:
+            # если ранее не свапали то делаем это
+            driver.find_element_by_xpath(
+                '//*[@id="root"]/div/div[2]/div/main/div/div/div[2]/div/div[2]/section/div[3]/button').click()
+
+        print('переключаюсь на вкладку metamask для апрува')
+        driver.switch_to.window(driver.window_handles[0])
+        driver.refresh()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/footer/button[2]').click()
+        print('переключаюсь на вкладку dex.guru для обмена')
+        driver.switch_to.window(driver.window_handles[2])
+        time.sleep(10)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/footer/button[2]')
+        print('переключаюсь на вкладку metamask для апрува')
+        driver.switch_to.window(driver.window_handles[0])
+        driver.refresh()
+        time.sleep(5)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/div[3]/footer/button[2]').click()
+        time.sleep(2)
+
+
+
+
+
+
