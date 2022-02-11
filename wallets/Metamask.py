@@ -81,6 +81,21 @@ class Metamask():
     def swapInMetamask(self,swapfrom,swapto,summ):
         print('swap in metamask')
 
+    def createAccaounts(self,count):
+        i = 1
+        driver.switch_to.window(driver.window_handles[0])
+        while i < count:
+            time.sleep(5)
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[1]/div/div[2]/div[2]/div').click()
+            time.sleep(3)
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div[6]/div[2]').click()
+            time.sleep(3)
+            i = i + 1
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div/div/div[2]/input').send_keys(f"abs{i}")
+            time.sleep(3)
+            driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div/div/div[2]/div/button[2]').click()
+            print(i)
+
     def addBscNetwork(self):
         Metamask.openSiteInNewTab('https://bscscan.com/',1)
         time.sleep(7)
