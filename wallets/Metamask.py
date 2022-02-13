@@ -179,6 +179,8 @@ class Metamask():
         driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/div[3]/footer/button[2]').click()
         time.sleep(2)
 
+        #test
+
 
 
 
