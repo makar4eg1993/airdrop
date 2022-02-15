@@ -111,6 +111,24 @@ class Metamask():
         driver.find_element_by_xpath('//*[@id="popover-content"]/div/div/section/header/div/button').click()
         time.sleep(5)
 
+    def parseWalletAdress(self):
+        driver.switch_to.window(driver.window_handles[0])
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div/div/div[1]/button').click()
+        print('нажал на три точки ')
+        time.sleep(3)
+        driver.find_element_by_xpath('//*[@id="popover-content"]/div[2]/button[1]/span').click()
+        print('нажал на реквизиты счета ')
+        time.sleep(3)
+        body = driver.execute_script("return document.body.innerHTML") #вернуть html если динамическая страница
+        bsoup = BeautifulSoup(body, 'html.parser')
+        test = bsoup.find_all("input", class_="readonly-input__input")
+        res = test[0]['value']
+        print(res)
+        f = open("walletsAddresses.txt", "w", encoding='utf-8')
+        f.write(f'{res}\n')
+        f.close()
+        return res
+
     def dexguruSwap(self):
         print('начал свапать на dex.guru')
         Metamask.openSiteInNewTab('https://dex.guru/token/0xe9e7cea3dedca5984780bafc599bd69add087d56-bsc',2)
@@ -178,8 +196,6 @@ class Metamask():
         time.sleep(5)
         driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/div[3]/footer/button[2]').click()
         time.sleep(2)
-
-        #test
 
 
 
