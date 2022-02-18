@@ -15,6 +15,7 @@ warnings.filterwarnings("ignore")
 #                             level=logging.DEBUG)
 
 class Metamask():
+    startWalletNumber = 1;
 
     def __init__(self,secret_pharse,password):
         self.password=password
@@ -82,6 +83,7 @@ class Metamask():
         print('swap in metamask')
 
     def createAccaounts(self,count):
+        self.parseWalletAdress()
         i = 1
         driver.switch_to.window(driver.window_handles[0])
         while i < count:
@@ -95,6 +97,8 @@ class Metamask():
             time.sleep(3)
             driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div/div/div[2]/div/button[2]').click()
             print(i)
+            time.sleep(3)
+            self.parseWalletAdress()
 
     def addBscNetwork(self):
         Metamask.openSiteInNewTab('https://bscscan.com/',1)
@@ -111,6 +115,7 @@ class Metamask():
         driver.find_element_by_xpath('//*[@id="popover-content"]/div/div/section/header/div/button').click()
         time.sleep(5)
 
+
     def parseWalletAdress(self):
         driver.switch_to.window(driver.window_handles[0])
         driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div/div/div[1]/button').click()
@@ -124,10 +129,23 @@ class Metamask():
         test = bsoup.find_all("input", class_="readonly-input__input")
         res = test[0]['value']
         print(res)
-        f = open("walletsAddresses.txt", "w", encoding='utf-8')
+        f = open("walletsAddresses.txt", "a", encoding='utf-8')
         f.write(f'{res}\n')
+        f.seek(0, 2)
         f.close()
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/span/div[1]/div/div/div/button[1]').click()
+        time.sleep(2)
         return res
+
+    def changeWalletToTheNext(self):
+        driver.switch_to.window(driver.window_handles[0])
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="app-content"]/div/div[1]/div/div[2]/div[2]/div/div/div').click()
+        time.sleep(3)
+
+        print(f"Переключился на кошелек:{self.startWalletNumber}")
+
+
 
     def dexguruSwap(self):
         print('начал свапать на dex.guru')
@@ -196,7 +214,6 @@ class Metamask():
         time.sleep(5)
         driver.find_element_by_xpath('//*[@id="app-content"]/div/div[4]/div/div[3]/div[3]/footer/button[2]').click()
         time.sleep(2)
-
 
 
 
